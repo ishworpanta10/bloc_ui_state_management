@@ -1,5 +1,6 @@
-import 'package:bloc_state_management/splash.dart';
 import 'package:flutter/material.dart';
+
+import 'splash.dart';
 
 void main() {
   runApp(MyApp());
