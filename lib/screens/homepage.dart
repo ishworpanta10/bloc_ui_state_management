@@ -1,5 +1,7 @@
 import 'package:bloc_state_management/bloc/ui_state_management/color_change_bloc.dart';
 import 'package:bloc_state_management/bloc/ui_state_management/dropdown_change_bloc.dart';
+import 'package:bloc_state_management/bloc/ui_state_management/select_button_bloc.dart';
+import 'package:bloc_state_management/models/button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,16 +9,13 @@ import '../bloc/ui_state_management/basic_text_state_management_bloc.dart';
 import '../widgets/widgets.dart';
 
 class HomePage extends StatelessWidget {
-  static final List<Color> colorList = [
-    Colors.green,
-    Colors.blue,
-    Colors.red,
-    Colors.orange,
-    Colors.cyanAccent,
-    Colors.black,
-    Colors.purple,
-  ];
+  static final List<Color> colorList = [Colors.green, Colors.blue, Colors.red, Colors.orange, Colors.cyanAccent, Colors.black, Colors.purple];
   static final dropDownItemsList = ["Green", "Blue", "Red", "Orange"];
+  final List<ButtonModel> buttonModelList = [
+    ButtonModel(text: "Menu", icon: Icons.menu),
+    ButtonModel(text: "Home", icon: Icons.account_balance_sharp),
+    ButtonModel(text: "Form", icon: Icons.email),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +105,24 @@ class HomePage extends StatelessWidget {
               ],
             ),
             divider,
+            ...List.generate(buttonModelList.length, (index) {
+              final buttonModel = buttonModelList[index];
+              return BlocBuilder<SelectButtonBloc, int>(
+                builder: (context, buttonState) {
+                  print(buttonState);
+                  return TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: index == buttonState ? Colors.greenAccent : null,
+                    ),
+                    onPressed: () {
+                      print(index);
+                      BlocProvider.of<SelectButtonBloc>(context).add(index);
+                    },
+                    child: Text(buttonModel.text),
+                  );
+                },
+              );
+            }),
             // TextFormField(
             //   decoration: const InputDecoration(hintText: 'email'),
             //   onChanged: (value) {
