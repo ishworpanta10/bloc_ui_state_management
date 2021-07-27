@@ -1,14 +1,15 @@
-import 'package:bloc_state_management/bloc/ui_state_management/change_form_decoration_bloc.dart';
-import 'package:bloc_state_management/bloc/ui_state_management/color_change_bloc.dart';
-import 'package:bloc_state_management/bloc/ui_state_management/dropdown_change_bloc.dart';
-import 'package:bloc_state_management/bloc/ui_state_management/select_button_and_get_text_data_bloc.dart';
-import 'package:bloc_state_management/bloc/ui_state_management/select_button_bloc.dart';
-import 'package:bloc_state_management/models/button_model.dart';
-import 'package:bloc_state_management/models/select_button_and_take_data_bloc_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/ui_state_management/basic_text_state_management_bloc.dart';
+import '../bloc/ui_state_management/change_form_decoration_bloc.dart';
+import '../bloc/ui_state_management/color_change_bloc.dart';
+import '../bloc/ui_state_management/dropdown_change_bloc.dart';
+import '../bloc/ui_state_management/get_form_string_data_bloc.dart';
+import '../bloc/ui_state_management/select_button_and_get_text_data_bloc.dart';
+import '../bloc/ui_state_management/select_button_bloc.dart';
+import '../models/button_model.dart';
+import '../models/select_button_and_take_data_bloc_model.dart';
 import '../widgets/widgets.dart';
 
 class HomePage extends StatelessWidget {
@@ -179,12 +180,14 @@ class HomePage extends StatelessWidget {
                 })
               ],
             ),
+            //selected data showing widget
             BlocBuilder<SelectButtonAndTakeTextDataBloc, SelectButtonAndTakeDataBlocModel>(
               builder: (context, selectDataModel) {
                 return selectDataModel.textData.isNotEmpty ? Text("Selected Button is ${selectDataModel.textData} and Index is ${selectDataModel.position}") : Container();
               },
             ),
             divider,
+            //form decoration change with user type bloc also getting data with another bloc
             BlocBuilder<ChangeFormDecorationAfterUserInputBloc, bool>(
               builder: (context, changeFormColorState) {
                 return TextFormField(
@@ -196,10 +199,18 @@ class HomePage extends StatelessWidget {
                   ),
                   onChanged: (value) {
                     BlocProvider.of<ChangeFormDecorationAfterUserInputBloc>(context).add(value);
+                    BlocProvider.of<GetFormStringDataBloc>(context).add(value);
                   },
                 );
               },
             ),
+            //  showing user typed data in bloc builder
+            BlocBuilder<GetFormStringDataBloc, String>(
+              builder: (context, formDataState) {
+                return Text(formDataState);
+              },
+            ),
+            divider,
           ],
         ),
       ),
