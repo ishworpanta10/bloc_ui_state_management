@@ -1,7 +1,9 @@
 import 'package:bloc_state_management/bloc/ui_state_management/color_change_bloc.dart';
 import 'package:bloc_state_management/bloc/ui_state_management/dropdown_change_bloc.dart';
+import 'package:bloc_state_management/bloc/ui_state_management/select_button_and_get_text_data_bloc.dart';
 import 'package:bloc_state_management/bloc/ui_state_management/select_button_bloc.dart';
 import 'package:bloc_state_management/models/button_model.dart';
+import 'package:bloc_state_management/models/select_button_and_take_data_bloc_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,6 +30,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //basic ui for text and color
             BlocBuilder<BasicTextManagementBloc, bool>(
               builder: (context, textChangeState) {
                 return BlocBuilder<DropdownChangeBloc, String>(
@@ -57,6 +60,7 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
+            //bloc event button for above widget
             Row(
               children: [
                 Flexible(
@@ -105,24 +109,66 @@ class HomePage extends StatelessWidget {
               ],
             ),
             divider,
-            ...List.generate(buttonModelList.length, (index) {
-              final buttonModel = buttonModelList[index];
-              return BlocBuilder<SelectButtonBloc, int>(
-                builder: (context, buttonState) {
-                  print(buttonState);
-                  return TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: index == buttonState ? Colors.greenAccent : null,
-                    ),
-                    onPressed: () {
-                      print(index);
-                      BlocProvider.of<SelectButtonBloc>(context).add(index);
+            Row(
+              children: [
+                ...List.generate(buttonModelList.length, (index) {
+                  final buttonModel = buttonModelList[index];
+                  return BlocBuilder<SelectButtonBloc, int>(
+                    builder: (context, buttonState) {
+                      print(buttonState);
+                      return Expanded(
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: index == buttonState ? Colors.greenAccent : null,
+                          ),
+                          onPressed: () {
+                            print(index);
+                            BlocProvider.of<SelectButtonBloc>(context).add(index);
+                          },
+                          child: Text(buttonModel.text),
+                        ),
+                      );
                     },
-                    child: Text(buttonModel.text),
                   );
-                },
-              );
-            }),
+                })
+              ],
+            ),
+            divider,
+            Row(
+              children: [
+                ...List.generate(buttonModelList.length, (index) {
+                  final buttonModel = buttonModelList[index];
+                  return BlocBuilder<SelectButtonAndTakeTextDataBloc, SelectButtonAndTakeDataBlocModel>(
+                    builder: (context, buttonState) {
+                      return Expanded(
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: index == buttonState.position ? Colors.greenAccent : null,
+                          ),
+                          onPressed: () {
+                            BlocProvider.of<SelectButtonAndTakeTextDataBloc>(context).add(
+                              SelectButtonAndTakeDataBlocModel(
+                                position: index,
+                                textData: buttonModel.text,
+                              ),
+                            );
+                            print("Selected Index : ${buttonState.position}");
+                            print("Selected Text : ${buttonState.textData}");
+                          },
+                          child: Text(buttonModel.text),
+                        ),
+                      );
+                    },
+                  );
+                })
+              ],
+            ),
+            BlocBuilder<SelectButtonAndTakeTextDataBloc, SelectButtonAndTakeDataBlocModel>(
+              builder: (context, selectDataModel) {
+                return selectDataModel.textData.isNotEmpty ? Text("Selected Button is ${selectDataModel.textData} and Index is ${selectDataModel.position}") : Container();
+              },
+            ),
+            divider,
             // TextFormField(
             //   decoration: const InputDecoration(hintText: 'email'),
             //   onChanged: (value) {

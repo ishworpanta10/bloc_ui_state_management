@@ -4,6 +4,7 @@ import 'package:bloc_state_management/bloc/ui_state_management/dropdown_change_b
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/ui_state_management/select_button_and_get_text_data_bloc.dart';
 import 'bloc/ui_state_management/select_button_bloc.dart';
 import 'screens/screens.dart';
 
@@ -25,6 +26,9 @@ class SplashScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => SelectButtonBloc(),
+        ),
+        BlocProvider(
+          create: (_) => SelectButtonAndTakeTextDataBloc(),
         ),
       ],
       child: MaterialApp(
