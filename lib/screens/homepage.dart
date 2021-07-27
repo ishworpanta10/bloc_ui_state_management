@@ -1,5 +1,6 @@
 import 'package:bloc_state_management/bloc/ui_state_management/color_change_bloc.dart';
 import 'package:bloc_state_management/bloc/ui_state_management/dropdown_change_bloc.dart';
+import 'package:bloc_state_management/bloc/ui_state_management/get_form_string_data_bloc.dart';
 import 'package:bloc_state_management/bloc/ui_state_management/select_button_and_get_text_data_bloc.dart';
 import 'package:bloc_state_management/bloc/ui_state_management/select_button_bloc.dart';
 import 'package:bloc_state_management/models/button_model.dart';
@@ -184,12 +185,21 @@ class HomePage extends StatelessWidget {
               },
             ),
             divider,
-            // TextFormField(
-            //   decoration: const InputDecoration(hintText: 'email'),
-            //   onChanged: (value) {
-            //     print(value);
-            //   },
-            // )
+            BlocBuilder<ChangeFormDecorationAfterUserInputBloc, bool>(
+              builder: (context, changeFormColorState) {
+                return TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'email',
+                    filled: changeFormColorState,
+                    fillColor: Colors.green.withOpacity(0.6),
+                    border: const OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    BlocProvider.of<ChangeFormDecorationAfterUserInputBloc>(context).add(value);
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
