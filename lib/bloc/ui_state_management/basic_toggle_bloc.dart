@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 //can be used in show hide password
-class BasicToggleBloc extends Bloc<bool, bool> {
-  BasicToggleBloc() : super(false);
+class PasswordToggleInFormBloc extends Bloc<bool, bool> {
+  PasswordToggleInFormBloc() : super(true);
 
   @override
   Stream<bool> mapEventToState(bool event) async* {

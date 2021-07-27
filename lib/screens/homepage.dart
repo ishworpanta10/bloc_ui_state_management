@@ -1,3 +1,4 @@
+import 'package:bloc_state_management/bloc/ui_state_management/basic_toggle_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -211,6 +212,24 @@ class HomePage extends StatelessWidget {
               },
             ),
             divider,
+            BlocBuilder<PasswordToggleInFormBloc, bool>(
+              builder: (context, passwordState) {
+                return TextFormField(
+                  obscureText: passwordState,
+                  decoration: InputDecoration(
+                    hintText: "password",
+                    border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        BlocProvider.of<PasswordToggleInFormBloc>(context).add(!passwordState);
+                      },
+                      icon: Icon(passwordState ? Icons.remove_red_eye_outlined : Icons.remove_red_eye),
+                      color: passwordState ? Colors.grey : Colors.blue,
+                    ),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
