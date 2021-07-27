@@ -97,9 +97,22 @@ class HomePage extends StatelessWidget {
                         },
                         value: dropDownState,
                         items: dropDownItemsList.map((e) {
+                          var color = Colors.black;
+                          if (dropDownState == "Green") {
+                            color = colorList[0];
+                          } else if (dropDownState == "Blue") {
+                            color = colorList[1];
+                          } else if (dropDownState == "Red") {
+                            color = colorList[2];
+                          } else if (dropDownState == "Orange") {
+                            color = colorList[3];
+                          }
                           return DropdownMenuItem(
                             value: e,
-                            child: Text(e),
+                            child: Text(
+                              e,
+                              style: TextStyle(color: color),
+                            ),
                           );
                         }).toList(),
                       );
@@ -109,6 +122,7 @@ class HomePage extends StatelessWidget {
               ],
             ),
             divider,
+            //select button and change button bg color with bloc
             Row(
               children: [
                 ...List.generate(buttonModelList.length, (index) {
@@ -134,6 +148,7 @@ class HomePage extends StatelessWidget {
               ],
             ),
             divider,
+            //select button and change bg color and take button data with bloc
             Row(
               children: [
                 ...List.generate(buttonModelList.length, (index) {
