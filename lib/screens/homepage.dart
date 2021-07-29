@@ -1,5 +1,7 @@
 import 'package:bloc_state_management/bloc/ui_state_management/basic_toggle_bloc.dart';
 import 'package:bloc_state_management/bloc/ui_state_management/radio_button_toggle_bloc.dart';
+import 'package:bloc_state_management/bloc/ui_state_management/range_slide_bloc.dart';
+import 'package:bloc_state_management/models/range_slide_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -237,7 +239,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             divider,
-            //toggle radio tile
+            //toggle radio tile with enum
             BlocBuilder<RadioButtonToggleBloc, RadioOptions>(
               builder: (context, radioToggleState) {
                 print("Toggle Radio Value $radioToggleState");
@@ -302,6 +304,40 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 );
+              },
+            ),
+            //showing selected radio tile using bloc builder
+            BlocBuilder<RadioButtonToggleBloc, RadioOptions>(
+              builder: (context, radioToggleState) {
+                var toggleValue = "Singer";
+                if (radioToggleState == RadioOptions.Singer) {
+                  toggleValue = "Singer";
+                } else if (radioToggleState == RadioOptions.Dancer) {
+                  toggleValue = "Dancer";
+                } else if (radioToggleState == RadioOptions.Athletic) {
+                  toggleValue = "Athletic";
+                }
+                return Text("Selected Radio Value : $toggleValue");
+              },
+            ),
+            // range slider using bloc
+            BlocBuilder<RangeSlideBloc, RangeSlideModel>(
+              builder: (context, rangeSlideState) {
+                return RangeSlider(
+                  values: RangeValues(rangeSlideState.start, rangeSlideState.end),
+                  max: 100,
+                  onChanged: (values) {
+                    context.read<RangeSlideBloc>().add(
+                          RangeSlideModel(start: values.start, end: values.end),
+                        );
+                  },
+                );
+              },
+            ),
+            //showing the seledted range
+            BlocBuilder<RangeSlideBloc, RangeSlideModel>(
+              builder: (context, rangeSlideState) {
+                return Text('Selected Start ${rangeSlideState.start.round()} Range End Range ${rangeSlideState.end.round()}');
               },
             ),
           ],
