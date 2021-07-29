@@ -1,6 +1,7 @@
-import 'package:bloc_state_management/screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../screens/homepage.dart';
 
 class ColorChangeBloc extends Bloc<ColorModel, ColorModel> {
   ColorChangeBloc() : super(ColorModel(color: Colors.black, index: 0));

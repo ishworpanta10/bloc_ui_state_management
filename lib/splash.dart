@@ -5,6 +5,7 @@ import 'bloc/ui_state_management/basic_text_state_management_bloc.dart';
 import 'bloc/ui_state_management/basic_toggle_bloc.dart';
 import 'bloc/ui_state_management/change_form_decoration_bloc.dart';
 import 'bloc/ui_state_management/color_change_bloc.dart';
+import 'bloc/ui_state_management/date_picker_bloc.dart';
 import 'bloc/ui_state_management/dropdown_change_bloc.dart';
 import 'bloc/ui_state_management/get_form_string_data_bloc.dart';
 import 'bloc/ui_state_management/radio_button_toggle_bloc.dart';
@@ -49,6 +50,9 @@ class SplashScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => RangeSlideBloc(),
+        ),
+        BlocProvider(
+          create: (_) => DatePickerBloc(),
         ),
       ],
       child: MaterialApp(

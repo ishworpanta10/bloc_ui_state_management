@@ -1,18 +1,19 @@
-import 'package:bloc_state_management/bloc/ui_state_management/basic_toggle_bloc.dart';
-import 'package:bloc_state_management/bloc/ui_state_management/radio_button_toggle_bloc.dart';
-import 'package:bloc_state_management/bloc/ui_state_management/range_slide_bloc.dart';
-import 'package:bloc_state_management/models/range_slide_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/ui_state_management/basic_text_state_management_bloc.dart';
+import '../bloc/ui_state_management/basic_toggle_bloc.dart';
 import '../bloc/ui_state_management/change_form_decoration_bloc.dart';
 import '../bloc/ui_state_management/color_change_bloc.dart';
+import '../bloc/ui_state_management/date_picker_bloc.dart';
 import '../bloc/ui_state_management/dropdown_change_bloc.dart';
 import '../bloc/ui_state_management/get_form_string_data_bloc.dart';
+import '../bloc/ui_state_management/radio_button_toggle_bloc.dart';
+import '../bloc/ui_state_management/range_slide_bloc.dart';
 import '../bloc/ui_state_management/select_button_and_get_text_data_bloc.dart';
 import '../bloc/ui_state_management/select_button_bloc.dart';
 import '../models/button_model.dart';
+import '../models/range_slide_model.dart';
 import '../models/select_button_and_take_data_bloc_model.dart';
 import '../widgets/widgets.dart';
 
@@ -44,16 +45,16 @@ class HomePage extends StatelessWidget {
               builder: (context, textChangeState) {
                 return BlocBuilder<DropdownChangeBloc, String>(
                   builder: (context, state) {
-                    var color = Colors.black;
-                    if (state == "Green") {
-                      color = HomePage.colorList[0];
-                    } else if (state == "Blue") {
-                      color = HomePage.colorList[1];
-                    } else if (state == "Red") {
-                      color = HomePage.colorList[2];
-                    } else if (state == "Orange") {
-                      color = HomePage.colorList[3];
-                    }
+                    // var color = Colors.black;
+                    // if (state == "Green") {
+                    //   color = HomePage.colorList[0];
+                    // } else if (state == "Blue") {
+                    //   color = HomePage.colorList[1];
+                    // } else if (state == "Red") {
+                    //   color = HomePage.colorList[2];
+                    // } else if (state == "Orange") {
+                    //   color = HomePage.colorList[3];
+                    // }
                     return BlocBuilder<ColorChangeBloc, ColorModel>(
                       builder: (context, stateColor) {
                         return Text(
@@ -101,7 +102,7 @@ class HomePage extends StatelessWidget {
                     builder: (context, dropDownState) {
                       return DropdownButton<String>(
                         onChanged: (value) {
-                          print(value);
+                          // print(value);
                           BlocProvider.of<DropdownChangeBloc>(context).add(value!);
                         },
                         value: dropDownState,
@@ -138,14 +139,14 @@ class HomePage extends StatelessWidget {
                   final buttonModel = buttonModelList[index];
                   return BlocBuilder<SelectButtonBloc, int>(
                     builder: (context, buttonState) {
-                      print(buttonState);
+                      // print(buttonState);
                       return Expanded(
                         child: TextButton(
                           style: TextButton.styleFrom(
                             backgroundColor: index == buttonState ? Colors.greenAccent : null,
                           ),
                           onPressed: () {
-                            print(index);
+                            // print(index);
                             BlocProvider.of<SelectButtonBloc>(context).add(index);
                           },
                           child: Text(buttonModel.text),
@@ -176,8 +177,8 @@ class HomePage extends StatelessWidget {
                                 textData: buttonModel.text,
                               ),
                             );
-                            print("Selected Index : ${buttonState.position}");
-                            print("Selected Text : ${buttonState.textData}");
+                            // print("Selected Index : ${buttonState.position}");
+                            // print("Selected Text : ${buttonState.textData}");
                           },
                           child: Text(buttonModel.text),
                         ),
@@ -242,16 +243,16 @@ class HomePage extends StatelessWidget {
             //toggle radio tile with enum
             BlocBuilder<RadioButtonToggleBloc, RadioOptions>(
               builder: (context, radioToggleState) {
-                print("Toggle Radio Value $radioToggleState");
-                var toggleValue = "Singer";
-                if (radioToggleState == RadioOptions.Singer) {
-                  toggleValue = "Singer";
-                } else if (radioToggleState == RadioOptions.Dancer) {
-                  toggleValue = "Dancer";
-                } else if (radioToggleState == RadioOptions.Athletic) {
-                  toggleValue = "Athletic";
-                }
-                print("Toggle String Value $toggleValue");
+                // print("Toggle Radio Value $radioToggleState");
+                // var toggleValue = "Singer";
+                // if (radioToggleState == RadioOptions.Singer) {
+                //   toggleValue = "Singer";
+                // } else if (radioToggleState == RadioOptions.Dancer) {
+                //   toggleValue = "Dancer";
+                // } else if (radioToggleState == RadioOptions.Athletic) {
+                //   toggleValue = "Athletic";
+                // }
+                // print("Toggle String Value $toggleValue");
                 return Row(
                   children: [
                     Expanded(
@@ -320,6 +321,7 @@ class HomePage extends StatelessWidget {
                 return Text("Selected Radio Value : $toggleValue");
               },
             ),
+            divider,
             // range slider using bloc
             BlocBuilder<RangeSlideBloc, RangeSlideModel>(
               builder: (context, rangeSlideState) {
@@ -334,11 +336,39 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
-            //showing the seledted range
+            //showing the selected range
             BlocBuilder<RangeSlideBloc, RangeSlideModel>(
               builder: (context, rangeSlideState) {
                 return Text('Selected Start ${rangeSlideState.start.round()} Range End Range ${rangeSlideState.end.round()}');
               },
+            ),
+            divider,
+            //date selector using bloc
+            BlocBuilder<DatePickerBloc, DateTime>(
+              builder: (context, datePickerState) {
+                final formattedDate = "${datePickerState.year}-${datePickerState.month}- ${datePickerState.day}";
+
+                return Text("Selected Dated : $formattedDate");
+              },
+            ),
+            TextButton.icon(
+              onPressed: () async {
+                final selectedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1990),
+                  lastDate: DateTime.now(),
+                  builder: (context, child) {
+                    return Theme(
+                      data: ThemeData.dark(),
+                      child: child ?? Container(),
+                    );
+                  },
+                );
+                BlocProvider.of<DatePickerBloc>(context).add(selectedDate);
+              },
+              icon: const Icon(Icons.date_range),
+              label: const Text('Select Date'),
             ),
           ],
         ),
