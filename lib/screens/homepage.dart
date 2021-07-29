@@ -1,4 +1,5 @@
 import 'package:bloc_state_management/bloc/ui_state_management/basic_toggle_bloc.dart';
+import 'package:bloc_state_management/bloc/ui_state_management/radio_button_toggle_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,9 +14,12 @@ import '../models/button_model.dart';
 import '../models/select_button_and_take_data_bloc_model.dart';
 import '../widgets/widgets.dart';
 
+enum RadioOptions { Singer, Dancer, Athletic }
+
 class HomePage extends StatelessWidget {
   static final List<Color> colorList = [Colors.green, Colors.blue, Colors.red, Colors.orange, Colors.cyanAccent, Colors.black, Colors.purple];
   static final dropDownItemsList = ["Green", "Blue", "Red", "Orange"];
+
   final List<ButtonModel> buttonModelList = [
     ButtonModel(text: "Menu", icon: Icons.menu),
     ButtonModel(text: "Home", icon: Icons.account_balance_sharp),
@@ -40,13 +44,13 @@ class HomePage extends StatelessWidget {
                   builder: (context, state) {
                     var color = Colors.black;
                     if (state == "Green") {
-                      color = colorList[0];
+                      color = HomePage.colorList[0];
                     } else if (state == "Blue") {
-                      color = colorList[1];
+                      color = HomePage.colorList[1];
                     } else if (state == "Red") {
-                      color = colorList[2];
+                      color = HomePage.colorList[2];
                     } else if (state == "Orange") {
-                      color = colorList[3];
+                      color = HomePage.colorList[3];
                     }
                     return BlocBuilder<ColorChangeBloc, ColorModel>(
                       builder: (context, stateColor) {
@@ -99,16 +103,16 @@ class HomePage extends StatelessWidget {
                           BlocProvider.of<DropdownChangeBloc>(context).add(value!);
                         },
                         value: dropDownState,
-                        items: dropDownItemsList.map((e) {
+                        items: HomePage.dropDownItemsList.map((e) {
                           var color = Colors.black;
                           if (dropDownState == "Green") {
-                            color = colorList[0];
+                            color = HomePage.colorList[0];
                           } else if (dropDownState == "Blue") {
-                            color = colorList[1];
+                            color = HomePage.colorList[1];
                           } else if (dropDownState == "Red") {
-                            color = colorList[2];
+                            color = HomePage.colorList[2];
                           } else if (dropDownState == "Orange") {
-                            color = colorList[3];
+                            color = HomePage.colorList[3];
                           }
                           return DropdownMenuItem(
                             value: e,
@@ -211,7 +215,9 @@ class HomePage extends StatelessWidget {
                 return Text(formDataState);
               },
             ),
+
             divider,
+            //password toggle bloc
             BlocBuilder<PasswordToggleInFormBloc, bool>(
               builder: (context, passwordState) {
                 return TextFormField(
@@ -227,6 +233,74 @@ class HomePage extends StatelessWidget {
                       color: passwordState ? Colors.grey : Colors.blue,
                     ),
                   ),
+                );
+              },
+            ),
+            divider,
+            //toggle radio tile
+            BlocBuilder<RadioButtonToggleBloc, RadioOptions>(
+              builder: (context, radioToggleState) {
+                print("Toggle Radio Value $radioToggleState");
+                var toggleValue = "Singer";
+                if (radioToggleState == RadioOptions.Singer) {
+                  toggleValue = "Singer";
+                } else if (radioToggleState == RadioOptions.Dancer) {
+                  toggleValue = "Dancer";
+                } else if (radioToggleState == RadioOptions.Athletic) {
+                  toggleValue = "Athletic";
+                }
+                print("Toggle String Value $toggleValue");
+                return Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Radio(
+                            value: RadioOptions.Singer,
+                            groupValue: radioToggleState,
+                            onChanged: (value) {
+                              context.read<RadioButtonToggleBloc>().add(value as RadioOptions);
+
+                              // setState(() {
+                              // // this _currentOption is defined in top with initial value as RadioOptions.Singer if we use setState
+                              // // and we use _currentOption as groupValue and Change it as below using onChanged value
+                              //   _currentOption = value as RadioOptions;
+                              // });
+                            },
+                          ),
+                          const Text('Singer'),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Radio(
+                            value: RadioOptions.Dancer,
+                            groupValue: radioToggleState,
+                            onChanged: (value) {
+                              context.read<RadioButtonToggleBloc>().add(value as RadioOptions);
+                            },
+                          ),
+                          const Text('Dancer'),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Radio(
+                            value: RadioOptions.Athletic,
+                            groupValue: radioToggleState,
+                            onChanged: (value) {
+                              context.read<RadioButtonToggleBloc>().add(value as RadioOptions);
+                            },
+                          ),
+                          const Text('Athletic'),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
               },
             ),

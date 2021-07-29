@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/ui_state_management/basic_toggle_bloc.dart';
 import 'bloc/ui_state_management/change_form_decoration_bloc.dart';
 import 'bloc/ui_state_management/get_form_string_data_bloc.dart';
+import 'bloc/ui_state_management/radio_button_toggle_bloc.dart';
 import 'bloc/ui_state_management/select_button_and_get_text_data_bloc.dart';
 import 'bloc/ui_state_management/select_button_bloc.dart';
 import 'screens/screens.dart';
@@ -41,6 +42,9 @@ class SplashScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => PasswordToggleInFormBloc(),
+        ),
+        BlocProvider(
+          create: (_) => RadioButtonToggleBloc(),
         ),
       ],
       child: MaterialApp(
