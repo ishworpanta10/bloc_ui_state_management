@@ -403,23 +403,18 @@ class HomePage extends StatelessWidget {
                 label: const Text('Select Date'),
               ),
               divider,
-              //form decoration change with user type cubit also getting data with another bloc
-              BlocBuilder<ChangeFormDecorationAfterUserInputCubit, FormDecorationChangeForCubitModel>(
+              //form decoration change with user type cubit also getting data
+              BlocBuilder<ChangeFormDecorationAfterUserInputCubit, String>(
                 builder: (context, changeFormColorCubitState) {
                   return TextFormField(
                     decoration: InputDecoration(
                       hintText: 'email',
-                      filled: changeFormColorCubitState.isTyped,
+                      filled: changeFormColorCubitState.isEmpty ? false : true,
                       fillColor: Colors.green.withOpacity(0.6),
                       border: const OutlineInputBorder(),
                     ),
                     onChanged: (value) {
-                      BlocProvider.of<ChangeFormDecorationAfterUserInputCubit>(context).isTextFieldTyped(
-                        FormDecorationChangeForCubitModel(
-                          text: value,
-                          isTyped: value.isNotEmpty ? true : false,
-                        ),
-                      );
+                      BlocProvider.of<ChangeFormDecorationAfterUserInputCubit>(context).getData(value);
                       // BlocProvider.of<GetFormStringDataBloc>(context).add(value);
                       // BlocProvider.of<ChangeFormDecorationAfterUserInputBloc>(context).add(value);
                       // BlocProvider.of<GetFormStringDataBloc>(context).add(value);
@@ -428,9 +423,14 @@ class HomePage extends StatelessWidget {
                 },
               ),
               //  showing user typed data in bloc builder
-              BlocBuilder<ChangeFormDecorationAfterUserInputCubit, FormDecorationChangeForCubitModel>(
+              BlocBuilder<ChangeFormDecorationAfterUserInputCubit, String>(
                 builder: (context, formDataState) {
-                  return Text(formDataState.text!);
+                  return formDataState.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Text(formDataState),
+                        )
+                      : const SizedBox();
                 },
               ),
             ],
