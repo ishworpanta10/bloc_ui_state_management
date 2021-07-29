@@ -396,6 +396,7 @@ class HomePage extends StatelessWidget {
                   );
                   // BlocProvider.of<DatePickerCubit>(context).pickedDate();
                   context.read<DatePickerCubit>().pickedDate(selectedDate);
+                  // context.read<DatePickerCubit>().pickDateForTomorrow(selectedDate);
                 },
                 icon: const Icon(Icons.date_range),
                 label: const Text('Select Date'),
