@@ -14,6 +14,7 @@ import 'bloc/ui_state_management/select_button_and_get_text_data_bloc.dart';
 import 'bloc/ui_state_management/select_button_bloc.dart';
 import 'cubit/change_form_decoration_after_user_input_cubit.dart';
 import 'cubit/date_picker_cubit.dart';
+import 'cubit/select_button_and_take_text_cubit.dart';
 import 'screens/screens.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -61,6 +62,9 @@ class SplashScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => ChangeFormDecorationAfterUserInputCubit(),
+        ),
+        BlocProvider(
+          create: (_) => SelectButtonAndTakeTextDataCubit(),
         ),
       ],
       child: MaterialApp(

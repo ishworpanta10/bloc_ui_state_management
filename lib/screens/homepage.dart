@@ -1,5 +1,6 @@
 import 'package:bloc_state_management/cubit/change_form_decoration_after_user_input_cubit.dart';
 import 'package:bloc_state_management/cubit/date_picker_cubit.dart';
+import 'package:bloc_state_management/cubit/select_button_and_take_text_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -374,6 +375,18 @@ class HomePage extends StatelessWidget {
                 label: const Text('Select Date'),
               ),
               divider,
+              Container(
+                width: double.infinity,
+                height: 40,
+                color: Colors.teal,
+                child: const Center(
+                  child: Text(
+                    "Using Cubit",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              divider,
               //date selector using Cubit
               BlocBuilder<DatePickerCubit, DateTime>(
                 builder: (context, datePickerState) {
@@ -433,6 +446,52 @@ class HomePage extends StatelessWidget {
                       : const SizedBox();
                 },
               ),
+              //select button and change bg color and take button data with bloc
+              Row(
+                children: [
+                  ...List.generate(buttonModelList.length, (index) {
+                    final buttonModel = buttonModelList[index];
+                    return BlocBuilder<SelectButtonAndTakeTextDataCubit, SelectButtonAndTakeDataBlocModel>(
+                      builder: (context, buttonState) {
+                        return Expanded(
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: index == buttonState.position ? Colors.greenAccent : null,
+                            ),
+                            onPressed: () {
+                              BlocProvider.of<SelectButtonAndTakeTextDataCubit>(context).getData(
+                                SelectButtonAndTakeDataBlocModel(
+                                  position: index,
+                                  textData: buttonModel.text,
+                                ),
+                              );
+
+                              // BlocProvider.of<SelectButtonAndTakeTextDataBloc>(context).add(
+                              //   SelectButtonAndTakeDataBlocModel(
+                              //     position: index,
+                              //     textData: buttonModel.text,
+                              //   ),
+                              // );
+                              // print("Selected Index : ${buttonState.position}");
+                              // print("Selected Text : ${buttonState.textData}");
+                            },
+                            child: Text(buttonModel.text),
+                          ),
+                        );
+                      },
+                    );
+                  })
+                ],
+              ),
+              //selected data showing widget
+              BlocBuilder<SelectButtonAndTakeTextDataCubit, SelectButtonAndTakeDataBlocModel>(
+                builder: (context, selectDataModel) {
+                  return selectDataModel.textData.isNotEmpty ? Text("Selected Button is ${selectDataModel.textData} and Index is ${selectDataModel.position}") : Container();
+                },
+              ),
+              divider,
+
+              const SizedBox(height: 40),
             ],
           ),
         ),
