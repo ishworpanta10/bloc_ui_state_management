@@ -1,3 +1,4 @@
+import 'package:bloc_state_management/cubit/change_form_decoration_after_user_input_cubit.dart';
 import 'package:bloc_state_management/cubit/date_picker_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -402,6 +403,36 @@ class HomePage extends StatelessWidget {
                 label: const Text('Select Date'),
               ),
               divider,
+              //form decoration change with user type cubit also getting data with another bloc
+              BlocBuilder<ChangeFormDecorationAfterUserInputCubit, FormDecorationChangeForCubitModel>(
+                builder: (context, changeFormColorCubitState) {
+                  return TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'email',
+                      filled: changeFormColorCubitState.isTyped,
+                      fillColor: Colors.green.withOpacity(0.6),
+                      border: const OutlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      BlocProvider.of<ChangeFormDecorationAfterUserInputCubit>(context).isTextFieldTyped(
+                        FormDecorationChangeForCubitModel(
+                          text: value,
+                          isTyped: value.isNotEmpty ? true : false,
+                        ),
+                      );
+                      // BlocProvider.of<GetFormStringDataBloc>(context).add(value);
+                      // BlocProvider.of<ChangeFormDecorationAfterUserInputBloc>(context).add(value);
+                      // BlocProvider.of<GetFormStringDataBloc>(context).add(value);
+                    },
+                  );
+                },
+              ),
+              //  showing user typed data in bloc builder
+              BlocBuilder<ChangeFormDecorationAfterUserInputCubit, FormDecorationChangeForCubitModel>(
+                builder: (context, formDataState) {
+                  return Text(formDataState.text!);
+                },
+              ),
             ],
           ),
         ),
