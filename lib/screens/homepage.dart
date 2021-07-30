@@ -1,6 +1,3 @@
-import 'package:bloc_state_management/cubit/change_form_decoration_after_user_input_cubit.dart';
-import 'package:bloc_state_management/cubit/date_picker_cubit.dart';
-import 'package:bloc_state_management/cubit/select_button_and_take_text_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,6 +12,9 @@ import '../bloc/ui_state_management/radio_button_toggle_bloc.dart';
 import '../bloc/ui_state_management/range_slide_bloc.dart';
 import '../bloc/ui_state_management/select_button_and_get_text_data_bloc.dart';
 import '../bloc/ui_state_management/select_button_bloc.dart';
+import '../cubit/change_form_decoration_after_user_input_cubit.dart';
+import '../cubit/date_picker_cubit.dart';
+import '../cubit/select_button_and_take_text_cubit.dart';
 import '../models/button_model.dart';
 import '../models/range_slide_model.dart';
 import '../models/select_button_and_take_data_bloc_model.dart';
@@ -44,6 +44,19 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              divider,
+              Container(
+                width: double.infinity,
+                height: 40,
+                color: Colors.teal,
+                child: const Center(
+                  child: Text(
+                    "State Management By Using Bloc",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              divider,
               //basic ui for text and color
               BlocBuilder<BasicTextManagementBloc, bool>(
                 builder: (context, textChangeState) {
@@ -381,7 +394,7 @@ class HomePage extends StatelessWidget {
                 color: Colors.teal,
                 child: const Center(
                   child: Text(
-                    "Using Cubit",
+                    "State Management By Using Cubit",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -422,7 +435,7 @@ class HomePage extends StatelessWidget {
                   return TextFormField(
                     decoration: InputDecoration(
                       hintText: 'email',
-                      filled: changeFormColorCubitState.isEmpty ? false : true,
+                      filled: changeFormColorCubitState.isNotEmpty,
                       fillColor: Colors.green.withOpacity(0.6),
                       border: const OutlineInputBorder(),
                     ),
